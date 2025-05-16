@@ -1,8 +1,11 @@
 package com.netriddle.spring_example.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Size;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestResponse {
     @JsonProperty("message")
     @Size(max = 2048)

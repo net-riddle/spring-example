@@ -49,9 +49,9 @@ public class MainConverter {
         GetRequestDataResponse getRequestDataResponse = new GetRequestDataResponse();
 
         getRequestDataResponse.setRequestDataList(requestDataList);
-        getRequestDataResponse.setMessage("Service is ONLINE");
+//        getRequestDataResponse.setMessage("Service is ONLINE");
         getRequestDataResponse.setDomain("spring-example");
-        getRequestDataResponse.setDetailed("Called from -> " + servletRequestInfoDTO.getIp());
+//        getRequestDataResponse.setDetailed("Called from -> " + servletRequestInfoDTO.getIp());
         getRequestDataResponse.setTimestamp(tools.getInstant());
         return getRequestDataResponse;
     }
