@@ -2,6 +2,7 @@ package com.netriddle.spring_example.controller;
 
 import com.netriddle.spring_example.model.converter.MainConverter;
 import com.netriddle.spring_example.model.dto.ServletRequestInfoDTO;
+import com.netriddle.spring_example.model.response.GetRequestDataResponse;
 import com.netriddle.spring_example.model.response.RestResponse;
 import com.netriddle.spring_example.service.MainService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,5 +25,12 @@ public class MainController {
         ServletRequestInfoDTO servletRequestInfoDTO = mainConverter.retrieveServletRequestInfo(httpServletRequest);
         RestResponse restResponse = mainService.rootPathService(servletRequestInfoDTO);
         return new ResponseEntity<>(restResponse,HttpStatus.OK);
+    }
+
+    @GetMapping("/request-data")
+    public ResponseEntity<Object> getRequestData(HttpServletRequest httpServletRequest){
+        ServletRequestInfoDTO servletRequestInfoDTO = mainConverter.retrieveServletRequestInfo(httpServletRequest);
+        GetRequestDataResponse getRequestDataResponse = mainService.getRequestDataService(servletRequestInfoDTO);
+        return new ResponseEntity<>(getRequestDataResponse,HttpStatus.OK);
     }
 }

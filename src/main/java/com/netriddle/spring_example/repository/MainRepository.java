@@ -21,4 +21,7 @@ public class MainRepository {
         RequestData requestData = mainConverter.fromServletRequestDtoToPO(servletRequestInfoDTO);
         requestDataStored.add(requestData);
     }
+    public List<RequestData> retrieveRequestData(){
+        return requestDataStored;
+    }
 }
