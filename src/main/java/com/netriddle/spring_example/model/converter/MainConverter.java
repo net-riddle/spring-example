@@ -1,5 +1,6 @@
 package com.netriddle.spring_example.model.converter;
 
+import com.netriddle.spring_example.config.ExampleAppProperties;
 import com.netriddle.spring_example.model.dto.ServletRequestInfoDTO;
 import com.netriddle.spring_example.model.po.RequestData;
 import com.netriddle.spring_example.model.response.GetRequestDataResponse;
@@ -16,12 +17,14 @@ public class MainConverter {
 
     @Autowired
     Tools tools;
+    @Autowired
+    ExampleAppProperties exampleAppProperties;
 
     public RestResponse retrieveRestResponseForRootPath(ServletRequestInfoDTO servletRequestInfoDTO){
         RestResponse restResponse = new RestResponse();
 
         restResponse.setMessage("Service is ONLINE");
-        restResponse.setDomain("spring-example");
+        restResponse.setDomain(exampleAppProperties.getName());
         restResponse.setDetailed("Called from -> " + servletRequestInfoDTO.getIp());
         restResponse.setTimestamp(tools.getInstant());
 
@@ -50,7 +53,7 @@ public class MainConverter {
 
         getRequestDataResponse.setRequestDataList(requestDataList);
 //        getRequestDataResponse.setMessage("Service is ONLINE");
-        getRequestDataResponse.setDomain("spring-example");
+        getRequestDataResponse.setDomain(exampleAppProperties.getName());
 //        getRequestDataResponse.setDetailed("Called from -> " + servletRequestInfoDTO.getIp());
         getRequestDataResponse.setTimestamp(tools.getInstant());
         return getRequestDataResponse;
