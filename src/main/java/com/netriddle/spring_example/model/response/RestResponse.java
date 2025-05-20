@@ -3,7 +3,13 @@ package com.netriddle.spring_example.model.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestResponse {
     @JsonProperty("message")
@@ -21,39 +27,4 @@ public class RestResponse {
     @JsonProperty("timestamp")
     @Size(max = 1024)
     private String timestamp;
-
-    public RestResponse() {
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
-    public String getDetailed() {
-        return detailed;
-    }
-
-    public void setDetailed(String detailed) {
-        this.detailed = detailed;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
 }
