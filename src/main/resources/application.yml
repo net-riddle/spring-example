@@ -1,3 +1,9 @@
 spring:
   application:
     name: spring-example
+
+security:
+  licensed-apps:
+    - local-postman
+    - app2
+    - app3
