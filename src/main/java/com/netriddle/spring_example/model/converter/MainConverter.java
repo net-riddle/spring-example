@@ -7,21 +7,23 @@ import com.netriddle.spring_example.model.response.GetRequestDataResponse;
 import com.netriddle.spring_example.model.response.RestResponse;
 import com.netriddle.spring_example.util.Tools;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class MainConverter {
 
-    @Autowired
-    Tools tools;
-    @Autowired
-    ExampleAppProperties exampleAppProperties;
+    private final Tools tools;
+    private final ExampleAppProperties exampleAppProperties;
 
     public RestResponse retrieveRestResponseForRootPath(ServletRequestInfoDTO servletRequestInfoDTO){
+        log.debug("Converter - Retrieve rest response for root path START with request -> {}", servletRequestInfoDTO.toString());
+
         RestResponse restResponse = new RestResponse();
 
         restResponse.setMessage("Service is ONLINE");
@@ -29,14 +31,19 @@ public class MainConverter {
         restResponse.setDetailed("Called from -> " + servletRequestInfoDTO.getIp());
         restResponse.setTimestamp(tools.getInstant());
 
+        log.debug("Converter -  Retrieve rest response for root path END with DTO -> {}", restResponse);
         return restResponse;
     }
 
     public ServletRequestInfoDTO retrieveServletRequestInfo(HttpServletRequest httpServletRequest){
+        log.debug("Converter - Retrieve servlet request info START with request -> {}", httpServletRequest.toString());
+
         String ip = getHeader(httpServletRequest,"X-Forwarded-For");
 
         ServletRequestInfoDTO servletRequestInfoDTO = new ServletRequestInfoDTO();
         servletRequestInfoDTO.setIp(ip);
+
+        log.debug("Converter - Retrieve servlet request info END with DTO -> {}", servletRequestInfoDTO);
         return servletRequestInfoDTO;
     }
 

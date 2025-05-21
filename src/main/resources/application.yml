@@ -7,3 +7,7 @@ security:
     - local-postman
     - app2
     - app3
+
+logging:
+  level:
+    com: DEBUG
