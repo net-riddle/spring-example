@@ -1,0 +1,79 @@
+package com.netriddle.spring_example.controller;
+
+import com.netriddle.spring_example.model.converter.UserConverter;
+import com.netriddle.spring_example.model.dto.UserDTO;
+import com.netriddle.spring_example.model.po.UserPO;
+import com.netriddle.spring_example.model.request.CreateUserRequest;
+import com.netriddle.spring_example.model.request.UpdateUserRequest;
+import com.netriddle.spring_example.model.response.*;
+import com.netriddle.spring_example.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import static com.netriddle.spring_example.util.Constants.BASE_ERROR_DETAILS;
+import static com.netriddle.spring_example.util.Constants.USER_NOT_FOUND_MESSAGE;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+    private final UserConverter userConverter;
+
+    @PostMapping("/user")
+    public ResponseEntity<CreateRequestResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
+        log.info("Controller - createUser START with request -> {}",createUserRequest);
+        UserDTO userDTO = userConverter.createRequestToUserDTO(createUserRequest);
+        CreateRequestResponse createRequestResponse = userService.createUser(userDTO);
+        log.info("Controller - createUser END with response -> {}",createRequestResponse);
+        return new ResponseEntity<>(createRequestResponse,HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<GetUsersResponse> getAllUsers() {
+        log.info("Controller - getUsers START");
+        GetUsersResponse getUsersResponse = userService.getUsers();
+        log.info("Controller - getUsers END with response -> {}", getUsersResponse);
+
+        if(getUsersResponse.getDetailed().equals(BASE_ERROR_DETAILS)){
+            return new ResponseEntity<>(getUsersResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+        }else{
+            return new ResponseEntity<>(getUsersResponse,HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable Long id) {
+        log.info("Controller - getUser START with id -> {}", id);
+        GetUserResponse getUserResponse = userService.getUser(id);
+        log.info("Controller - getUser END with response -> {}", getUserResponse);
+
+        if(getUserResponse.getMessage().equals(USER_NOT_FOUND_MESSAGE)){
+            return new ResponseEntity<>(getUserResponse,HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(getUserResponse,HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        log.info("Controller - updateUser START with id -> {}", updateUserRequest);
+        UserDTO userDTO = userConverter.updateRequestToDto(updateUserRequest);
+        UpdateUserResponse updateUserResponse = userService.updateUser(userDTO);
+        log.info("Controller - updateUser END with response -> {}", updateUserResponse);
+
+        return new ResponseEntity<>(updateUserResponse,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<DeleteUserResponse> deleteUser(@PathVariable Long id) {
+        log.info("Controller - deleteUser START with id -> {}", id);
+        DeleteUserResponse deleteUserResponse = userService.deleteUser(id);
+        log.info("Controller - deleteUser END with response -> {}", deleteUserResponse);
+        return new ResponseEntity<>(deleteUserResponse,HttpStatus.ACCEPTED);
+    }
+}

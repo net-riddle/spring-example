@@ -11,11 +11,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.netriddle.spring_example.util.Constants.HEADER_APP_KEY_NAME;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ExampleHeadersFilter extends OncePerRequestFilter {
-    private static final String HEADER_APP_KEY_NAME = "X-APP-KEY";
 
     private final ExampleSecurityProperties exampleSecurityProperties;
 
