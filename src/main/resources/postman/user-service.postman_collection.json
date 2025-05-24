@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "9d2dd808-76a6-433e-a948-4ccbd777fb1e",
+		"name": "user-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23891502",
+		"_collection_link": "https://medusa-0894.postman.co/workspace/6ab5bc17-4728-45e6-86d0-4fe7f410c9d5/collection/23891502-9d2dd808-76a6-433e-a948-4ccbd777fb1e?action=share&source=collection_link&creator=23891502"
+	},
+	"item": [
+		{
+			"name": "User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-APP-KEY",
+						"value": "local-postman",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\",\r\n    \"email\":\"pepep@mnvskf.com\",\r\n    \"password\":\"cristosdma\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-APP-KEY",
+						"value": "local-postman",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-APP-KEY",
+						"value": "local-postman",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/user/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"9"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-APP-KEY",
+						"value": "local-postman",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"9\",\r\n    \"name\":\"test\",\r\n    \"email\":\"pepep@mnvskf.com\",\r\n    \"password\":\"\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-APP-KEY",
+						"value": "local-postman",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"9\",\r\n    \"name\":\"test\",\r\n    \"email\":\"pepep@mnvskf.com\",\r\n    \"password\":\"\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"9"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

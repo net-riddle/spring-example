@@ -10,8 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserResponse extends RestResponse{
-    private String id;
-    private String name;
-    private String email;
-    private String role;
+    private UserResponse user;
 }

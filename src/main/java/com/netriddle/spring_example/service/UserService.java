@@ -40,7 +40,7 @@ public class UserService {
     public GetUsersResponse getUsers() {
         log.info("Service - getUsers START");
 
-        List<UserPO> userList = userRepository.findAllUsers();
+        List<UserPO> userList = userRepository.findAll();
         GetUsersResponse getUsersResponse = userConverter.listOfUsersGetUsersResponse(userList);
 
         log.info("Service - getUsers END with response -> {}",getUsersResponse);
@@ -54,7 +54,7 @@ public class UserService {
 
         GetUserResponse getUserResponse;
         if(userPo.isPresent()){
-            getUserResponse = userConverter.userPoToGetUserResponse(userPo.get());
+            getUserResponse = userConverter.userPoToGetUserResponse(userPo.get(), false);
         }else{
             getUserResponse = userConverter.getUserResponse();
         }
@@ -67,7 +67,7 @@ public class UserService {
         log.info("Service - updateUser START with dto -> {}", userDTO);
 
         UserPO userToUpdate = userConverter.dtoToPo(userDTO);
-        UserPO currentUser = userRepository.updateUser(userToUpdate);
+        UserPO currentUser = userRepository.save(userToUpdate);
         UpdateUserResponse updateUserResponse = userConverter.userToUpdateResponse(currentUser);
 
         log.info("Service - updateUser START with updateUserResponse -> {}", updateUserResponse);

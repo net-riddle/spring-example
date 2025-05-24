@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUserResponse extends RestResponse{
-    private String id;
-    private String name;
-    private String email;
-    private String role;
+public class GetUserResponse extends RestResponse {
+    private UserResponse user;
 }

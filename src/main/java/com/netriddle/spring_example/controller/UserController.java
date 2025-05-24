@@ -39,10 +39,10 @@ public class UserController {
         GetUsersResponse getUsersResponse = userService.getUsers();
         log.info("Controller - getUsers END with response -> {}", getUsersResponse);
 
-        if(getUsersResponse.getDetailed().equals(BASE_ERROR_DETAILS)){
-            return new ResponseEntity<>(getUsersResponse,HttpStatus.INTERNAL_SERVER_ERROR);
-        }else{
+        if(getUsersResponse.getDetailed() == null){
             return new ResponseEntity<>(getUsersResponse,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(getUsersResponse,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,14 +52,16 @@ public class UserController {
         GetUserResponse getUserResponse = userService.getUser(id);
         log.info("Controller - getUser END with response -> {}", getUserResponse);
 
-        if(getUserResponse.getMessage().equals(USER_NOT_FOUND_MESSAGE)){
+        if(getUserResponse.getMessage() == null){
+            return new ResponseEntity<>(getUserResponse,HttpStatus.OK);
+        }else if (getUserResponse.getMessage().equals(USER_NOT_FOUND_MESSAGE)) {
             return new ResponseEntity<>(getUserResponse,HttpStatus.NOT_FOUND);
         }else{
-            return new ResponseEntity<>(getUserResponse,HttpStatus.OK);
+            return new ResponseEntity<>(getUserResponse,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/user")
     public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
         log.info("Controller - updateUser START with id -> {}", updateUserRequest);
         UserDTO userDTO = userConverter.updateRequestToDto(updateUserRequest);

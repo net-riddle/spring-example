@@ -16,6 +16,9 @@ import lombok.Setter;
 public class UpdateUserRequest {
     @NotNull
     @NotBlank
+    private String id;
+    @NotNull
+    @NotBlank
     private String name;
     @Email
     @NotNull
@@ -24,4 +27,7 @@ public class UpdateUserRequest {
     @Size(min = 8)
     @NotNull
     private String password;
+    @NotNull
+    @NotBlank
+    private String role;
 }
