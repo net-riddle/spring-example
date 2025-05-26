@@ -1,5 +1,7 @@
 package com.netriddle.spring_example.model.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 

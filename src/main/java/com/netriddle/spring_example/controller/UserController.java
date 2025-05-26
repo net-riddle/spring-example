@@ -7,10 +7,12 @@ import com.netriddle.spring_example.model.request.CreateUserRequest;
 import com.netriddle.spring_example.model.request.UpdateUserRequest;
 import com.netriddle.spring_example.model.response.*;
 import com.netriddle.spring_example.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.netriddle.spring_example.util.Constants.BASE_ERROR_DETAILS;
@@ -25,7 +27,7 @@ public class UserController {
     private final UserConverter userConverter;
 
     @PostMapping("/user")
-    public ResponseEntity<CreateRequestResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<CreateRequestResponse> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         log.info("Controller - createUser START with request -> {}",createUserRequest);
         UserDTO userDTO = userConverter.createRequestToUserDTO(createUserRequest);
         CreateRequestResponse createRequestResponse = userService.createUser(userDTO);
