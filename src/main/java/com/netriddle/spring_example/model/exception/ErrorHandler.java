@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,11 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//Obiettivo del codice
-//Salvare il contenuto del corpo della richiesta in un oggetto statico e accessibile
-// per tutto il ciclo di vita della richiesta
-// (es. per logging, debugging, gestione errori personalizzata, ecc.).
 @Slf4j
-// intercetta e gestisce automaticamente richieste e risposte per i controller specificati.
+@Setter
 @RestControllerAdvice(assignableTypes = {MainController.class, UserController.class})
-//RequestBodyAdvice ti permette di intercettare e manipolare il corpo della richiesta (@RequestBody) prima che venga deserializzato in oggetto Java.
 public class ErrorHandler implements RequestBodyAdvice {
 
-    //ThreadLocal consente di mantenere dati iscritti al singolo thread della richiesta. Serve a salvare il body per usarlo altrove nello stesso flusso di esecuzione (ad esempio nei logger o negli handler).
     private static final ThreadLocal<ErrorHandler> requestInfoThreadLocal = new ThreadLocal<>();
     private String body;
 
@@ -93,15 +88,13 @@ public class ErrorHandler implements RequestBodyAdvice {
 
         Map<String, String> fieldsMap = new HashMap<>();
 
-        if (ex instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException) ex;
-
+        if (ex instanceof MethodArgumentNotValidException methodArgumentNotValidException) {
             BindingResult result = methodArgumentNotValidException.getBindingResult();
-            List<FieldError> fieldErrors = result.getFieldErrors();
 
+            List<FieldError> fieldErrors = result.getFieldErrors();
             fieldsMap = fieldErrors.stream().collect(Collectors.groupingBy(FieldError::getField, Collectors.mapping(FieldError::getDefaultMessage, Collectors.joining(","))));
-        } else if (ex instanceof MissingServletRequestParameterException) {
-            MissingServletRequestParameterException missingServletRequestParameterException = (MissingServletRequestParameterException) ex;
+
+        } else if (ex instanceof MissingServletRequestParameterException missingServletRequestParameterException) {
             fieldsMap.put(missingServletRequestParameterException.getParameterName(), missingServletRequestParameterException.getMessage());
         } else {
             return buildError(request, ErrorMsg.USRSRV01.getCode(), ErrorMsg.USRSRV01.getMessage(), ex.getMessage(), DomainMsg.MICROSERVICE_FUNCTIONAL.getName());
@@ -113,14 +106,12 @@ public class ErrorHandler implements RequestBodyAdvice {
     @ExceptionHandler({ ConstraintViolationException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public final CommonErrorResponse handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
-
         log.error("ConstraintViolationException: ", ex);
 
         Map<String, String> fieldsMap = new HashMap<>();
+        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
 
-        Set<ConstraintViolation<?>> contstraintVoilations = ex.getConstraintViolations();
-
-        for (ConstraintViolation<?> violation : contstraintVoilations) {
+        for (ConstraintViolation<?> violation : constraintViolations) {
             String fieldName = null;
 
             for (Path.Node node : violation.getPropertyPath()) {
@@ -164,7 +155,6 @@ public class ErrorHandler implements RequestBodyAdvice {
     }
 
     private CommonErrorResponse buildInvalidFieldsError(HttpServletRequest request, Map<String, String> fieldsMap) {
-
         String message = "Invalid Fields: " + StringUtils.join(fieldsMap.keySet(), ',');
 
         return buildError(request, ErrorMsg.USRSRV01.getCode(), message, StringUtils.join(fieldsMap.values(), ','), DomainMsg.MICROSERVICE_FUNCTIONAL.getName());
@@ -193,34 +183,26 @@ public class ErrorHandler implements RequestBodyAdvice {
         return commonErrorResponse;
     }
 
-    //tutte le richieste sono supportate
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
-    // Nessuna modifica al flusso della richiesta.
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType)
             throws IOException {
         return inputMessage;
     }
 
-    //Dopo che il corpo è stato letto e deserializzato, viene salvato il contenuto nel ThreadLocal tramite setBodyInThreadLocal
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         ErrorHandler.setBodyInThreadLocal(body.toString());
         return body;
     }
 
-    //Non fa nulla se il body è vuoto.
     @Override
     public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
 }
